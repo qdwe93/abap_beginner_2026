@@ -23,6 +23,12 @@
 - 실제 SAP 객체 생성 시 학생 번호로 바꾼다.
 - `ZEDU_MAIN_DEMO`는 강사 슬롯 `00`의 객체(`ZEDU00_*`)를 사용한다.
 
+## TP 스켈레톤(`TP_ZEDU##_MAIN.abap`) 사용법
+
+- 이 파일은 새 프로그램 생성용 독립 골격이 아니다. 확정 복사 체인 `ZEDU##_LIST → ZEDU##_U19 → ZEDU##_MAIN`에 따라, SE38에서 `ZEDU##_U19`를 `ZEDU##_MAIN`으로 GUI Status·Text Elements와 함께 복사한 뒤 사용하는 복구/대조용 소스다.
+- PF-STATUS `MAIN`은 `.abap` 텍스트만으로 생성되지 않으므로 SE38 복사 옵션의 GUI Status 체크가 필수다.
+- 소스는 U19 복사 직후 상태(선택화면·조회·ALV·콜백·PF-STATUS 참조 완성)이며, TP-2~TP-4의 create/change/delete FORM만 단계별 TODO로 남아 있다.
+
 ## 소스가 없는 유닛
 
 | 유닛 | 이유 | 패키지 자료 |

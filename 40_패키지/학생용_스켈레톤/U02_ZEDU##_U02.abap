@@ -6,6 +6,7 @@ DATA: gv_prod_name TYPE c LENGTH 30,
       gv_amount    TYPE p LENGTH 10 DECIMALS 2,
       gv_today     TYPE d.
 
+" Q03 빠른 학생 확장용(부가세 10% 줄 추가)에 쓰는 상수 — 기본 TODO와 완성본에서는 사용하지 않음
 CONSTANTS gc_vat_rate TYPE p LENGTH 3 DECIMALS 2 VALUE '0.10'.
 
 gv_prod_name = '기계식 키보드'.

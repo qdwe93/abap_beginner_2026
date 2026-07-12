@@ -44,9 +44,23 @@ ENDFORM.
 FORM show_alv.
   DATA ls_layout TYPE slis_layout_alv.
   ls_layout-zebra = 'X'. ls_layout-colwidth_optimize = 'X'.
-* TODO 1: REUSE_ALV_GRID_DISPLAY 호출을 작성하고(U15 참조)
-*         I_CALLBACK_PF_STATUS_SET = 'SET_STATUS',
-*         I_CALLBACK_USER_COMMAND  = 'USER_COMMAND' 콜백 두 줄을 연결하세요.
+* TODO 1: 아래 기존 ALV 호출의 EXPORTING에 콜백 두 줄을 추가하세요. (교재 U19 (2))
+*         i_callback_pf_status_set = 'SET_STATUS'
+*         i_callback_user_command  = 'USER_COMMAND'
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+      i_callback_program = sy-repid
+      i_structure_name   = 'ZEDU##_S_LIST'
+      is_layout          = ls_layout
+      i_grid_title       = '주문 목록'
+    TABLES
+      t_outtab           = gt_list
+    EXCEPTIONS
+      program_error      = 1
+      OTHERS             = 2.
+  IF sy-subrc <> 0.
+    WRITE / 'ALV 호출 오류'.
+  ENDIF.
 ENDFORM.
 
 * TODO 2: FORM set_status를 작성하세요. (SET PF-STATUS 'MAIN' EXCLUDING pt_extab)
