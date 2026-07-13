@@ -3,7 +3,7 @@
  * 헬퍼·팔레트·마스터는 day1_slides.js와 동일(일관성 유지). 유닛 데이터만 교체. */
 const pptxgen = require("pptxgenjs");
 
-const OUT = "C:\\workspace\\abap_beginner_2026\\50_슬라이드\\SLIDES_Day2.pptx";
+const OUT = "C:\\Workspaces\\abap_beginner_2026\\50_슬라이드\\SLIDES_Day2.pptx";
 
 // ---- palette / fonts ------------------------------------------------------
 const NAVY = "1E2761";      // primary
@@ -42,11 +42,32 @@ pres.defineSlideMaster({
 });
 
 // ---- helpers ---------------------------------------------------------------
-function light() { return pres.addSlide({ masterName: "LIGHT" }); }
-function dark() { return pres.addSlide({ masterName: "DARK" }); }
+function sourceFor(chip) {
+  const tag = String(chip || "");
+  const unit = tag.match(/^(U\d{2})/);
+  if (unit) return `11_교재_Day2.md > ${unit[1]}; 20_퀴즈집.md > ${unit[1]}; 30_강사가이드.md > ${unit[1]}`;
+  if (tag === "복습") return "11_교재_Day2.md > 복습 퀴즈 R2; 30_강사가이드.md > 복습 퀴즈 R2";
+  if (tag === "종합실습②") return "11_교재_Day2.md > 종합실습 ②; 30_강사가이드.md > 종합실습②";
+  return "11_교재_Day2.md; 01_커리큘럼.md; 30_강사가이드.md; 96_슬라이드_기획안.md";
+}
+
+function slideWithSourcedNotes(masterName) {
+  const s = pres.addSlide({ masterName });
+  const addNotes = s.addNotes.bind(s);
+  s.addNotes = (text) => {
+    const body = String(text || "");
+    const prefix = /출처\s*:/.test(body) ? "" : `출처: ${sourceFor(s._sourceChip)}.\n`;
+    return addNotes(prefix + body);
+  };
+  return s;
+}
+
+function light() { return slideWithSourcedNotes("LIGHT"); }
+function dark() { return slideWithSourcedNotes("DARK"); }
 
 // content-slide header: unit chip + title (+kind tag right)
 function header(s, chip, title, kind) {
+  s._sourceChip = chip;
   s.addShape("roundRect", { x: 0.55, y: 0.42, w: 1.05, h: 0.46, fill: { color: NAVY }, rectRadius: 0.09 });
   s.addText(chip, { x: 0.55, y: 0.42, w: 1.05, h: 0.46, align: "center", valign: "middle", fontFace: F, fontSize: 15, bold: true, color: "FFFFFF", margin: 0 });
   s.addText(title, { x: 1.8, y: 0.36, w: 9.0, h: 0.6, fontFace: F, fontSize: 23, bold: true, color: INK, margin: 0, valign: "middle" });
@@ -56,6 +77,7 @@ function header(s, chip, title, kind) {
 // dark unit-title slide
 function unitTitle(chip, time, title, goals, prog, noteTxt) {
   const s = dark();
+  s._sourceChip = chip;
   s.addText(chip, { x: 0.9, y: 1.15, w: 4.0, h: 0.7, fontFace: F, fontSize: 30, bold: true, color: ACCENT, margin: 0 });
   s.addText(time, { x: 0.9, y: 1.82, w: 6.5, h: 0.42, fontFace: F, fontSize: 15, color: ICE, margin: 0 });
   s.addText(title, { x: 0.9, y: 2.45, w: 11.5, h: 1.15, fontFace: F, fontSize: 36, bold: true, color: "FFFFFF", margin: 0 });
@@ -687,7 +709,7 @@ bullets(s, [
   { t: "주문번호 From 1 To 5 → 구간 조회 · 화살표 버튼 → 복수/제외 값" },
   { t: "상태 칸에서 F4 → 도메인 고정값(N/C/X) 목록이 공짜! (어제 U06의 보상)", b: true },
 ], { x: 0.55, y: 1.25, w: 6.9, h: 4.3, fontSize: 13 });
-shot(s, { x: 7.65, y: 1.3, w: 5.15, h: 4.4, id: "D2-01", cap: "선택화면 실행 — SELECT-OPTIONS 복수선택 팝업\n(주문번호 화살표 → 포함/제외 탭)" });
+shot(s, { x: 7.65, y: 1.3, w: 5.15, h: 4.4, id: "D2-01", cap: "주문번호 복수선택 팝업 — 포함/제외 탭\n선택 텍스트 라벨(상태·주문일·주문번호)" });
 s.addNotes("선택 텍스트를 붙이기 전·후를 비교. Selection Texts 저장 후 프로그램 활성화 누락이 자주 막힘. F4 도메인 고정값은 어제 U06 도메인 설계의 보상.");
 
 /* 38. DEFAULT/OBLIGATORY + 흔한 에러 */

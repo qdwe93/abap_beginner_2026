@@ -2,7 +2,7 @@
  * 원본: 10_교재_Day1.md / 30_강사가이드.md / 96_슬라이드_기획안.md */
 const pptxgen = require("pptxgenjs");
 
-const OUT = "C:\\workspace\\abap_beginner_2026\\50_슬라이드\\SLIDES_Day1.pptx";
+const OUT = "C:\\Workspaces\\abap_beginner_2026\\50_슬라이드\\SLIDES_Day1.pptx";
 
 // ---- palette / fonts ------------------------------------------------------
 const NAVY = "1E2761";      // primary
@@ -41,11 +41,31 @@ pres.defineSlideMaster({
 });
 
 // ---- helpers ---------------------------------------------------------------
-function light() { return pres.addSlide({ masterName: "LIGHT" }); }
-function dark() { return pres.addSlide({ masterName: "DARK" }); }
+function sourceFor(chip) {
+  const tag = String(chip || "");
+  const unit = tag.match(/^(OT|U\d{2})/);
+  if (unit) return `10_교재_Day1.md > ${unit[1]}; 30_강사가이드.md > ${unit[1]}`;
+  if (tag === "퀴즈①") return "10_교재_Day1.md > 미니 종합퀴즈 ①; 20_퀴즈집.md > U02; 30_강사가이드.md > 미니 종합퀴즈①";
+  return "10_교재_Day1.md; 01_커리큘럼.md; 30_강사가이드.md; 96_슬라이드_기획안.md";
+}
+
+function slideWithSourcedNotes(masterName) {
+  const s = pres.addSlide({ masterName });
+  const addNotes = s.addNotes.bind(s);
+  s.addNotes = (text) => {
+    const body = String(text || "");
+    const prefix = /출처\s*:/.test(body) ? "" : `출처: ${sourceFor(s._sourceChip)}.\n`;
+    return addNotes(prefix + body);
+  };
+  return s;
+}
+
+function light() { return slideWithSourcedNotes("LIGHT"); }
+function dark() { return slideWithSourcedNotes("DARK"); }
 
 // content-slide header: unit chip + title (+kind tag right)
 function header(s, chip, title, kind) {
+  s._sourceChip = chip;
   s.addShape("roundRect", { x: 0.55, y: 0.42, w: 1.05, h: 0.46, fill: { color: NAVY }, rectRadius: 0.09 });
   s.addText(chip, { x: 0.55, y: 0.42, w: 1.05, h: 0.46, align: "center", valign: "middle", fontFace: F, fontSize: 15, bold: true, color: "FFFFFF", margin: 0 });
   s.addText(title, { x: 1.8, y: 0.36, w: 9.0, h: 0.6, fontFace: F, fontSize: 23, bold: true, color: INK, margin: 0, valign: "middle" });
@@ -55,6 +75,7 @@ function header(s, chip, title, kind) {
 // dark unit-title slide
 function unitTitle(chip, time, title, goals, prog, noteTxt) {
   const s = dark();
+  s._sourceChip = chip;
   s.addText(chip, { x: 0.9, y: 1.15, w: 4.0, h: 0.7, fontFace: F, fontSize: 30, bold: true, color: ACCENT, margin: 0 });
   s.addText(time, { x: 0.9, y: 1.82, w: 5.0, h: 0.42, fontFace: F, fontSize: 15, color: ICE, margin: 0 });
   s.addText(title, { x: 0.9, y: 2.45, w: 11.5, h: 1.15, fontFace: F, fontSize: 38, bold: true, color: "FFFFFF", margin: 0 });
@@ -527,7 +548,7 @@ bullets(s, [
   { t: "출력: 제품명/수량/단가/합계금액 각 줄 + 마지막 줄에 오늘 날짜", b: true },
 ], { x: 0.55, y: 1.4, w: 12.0, h: 1.9, fontSize: 16 });
 card(s, 0.55, 3.5, 5.9, 2.6, "막히면", "U01 — 프로그램 생성 절차\nU02 — 선언·계산 페이지\n\n(8분 후 강사가 순서 힌트 공개)", { bSize: 13 });
-card(s, 6.75, 3.5, 6.05, 2.6, "빨리 끝났다면", "부가세 10% 줄 추가\n— 부가세도 변수에 계산한 뒤 출력!\n(WRITE에는 수식을 쓸 수 없습니다)\n\n또는 퀴즈집 D02", { fill: "FDF3E3", tColor: "9A6A12", bSize: 13 });
+card(s, 6.75, 3.5, 6.05, 2.6, "수준별 다음 문제", "빨리 끝났다면: 부가세 10% 줄 추가 또는 퀴즈집 D02\n— 부가세도 변수에 계산한 뒤 출력!\n\n어려웠다면: 퀴즈집 E02\n(WRITE에는 수식을 쓸 수 없습니다)", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
 s.addNotes("완료 학생은 부가세 확장 또는 퀴즈집 D02. 점심 전 마무리 — 완성 못 해도 점심 후 U03에 지장 없음을 안내.");
 
 /* ===========================================================================
@@ -726,6 +747,7 @@ s.addText([{ text: "ZEDU##_U04Q", options: { fontFace: FC, bold: true, color: NA
   { x: 0.55, y: 1.35, w: 12.2, h: 0.5, fontFace: F, fontSize: 15.5, color: INK, margin: 0 });
 card(s, 0.55, 2.1, 5.9, 2.2, "힌트 / 판정", "힌트: MOD\n\n기대 결과: 1683", { bSize: 15 });
 card(s, 6.75, 2.1, 6.05, 2.2, "스켈레톤 없음", "Q03에 이어 두 번째 백지 코딩.\nREPORT부터 스스로!", { fill: "FDF3E3", tColor: "9A6A12", bSize: 13.5 });
+banner(s, 0.55, 4.65, 12.25, "빨리 끝났다면 퀴즈집 D04 · 어려웠다면 E04 · 정답은 교재 부록 A", { color: "FDF3E3", tcolor: "9A6A12" });
 s.addNotes("완료자는 퀴즈집 U04-D. 남은 10분 내 미완료여도 U05 진행에 지장 없음.");
 
 /* 39. 브릿지 */
@@ -764,7 +786,7 @@ tbl(s, [
   [{ text: "F8", b: true }, "다음 브레이크포인트까지 계속 (없으면 끝까지)"],
   ["변수 보기", "변수명 더블클릭 → 우측 값 표시 (연필 아이콘 = 값 변경)"],
 ], { x: 0.55, y: 1.3, w: 7.4, colW: [1.9, 5.5], fontSize: 11, rowH: 0.42 });
-shot(s, { x: 8.2, y: 1.3, w: 4.6, h: 4.4, id: "D1-04", cap: "디버거 화면 — 현재 줄 표시와\n변수값 감시 영역" });
+shot(s, { x: 8.2, y: 1.3, w: 4.6, h: 4.4, id: "D1-04", cap: "디버거 — 현재 실행 줄 + 변수값 감시\n(gv_sum · sy-index)" });
 s.addNotes("F5/F6 차이는 Day 3 함수 호출부터 체감된다고 예고. 디버거는 '코드 바라보기'가 아니라 실행 중 값이 언제 달라지는지 찾는 도구.");
 
 /* 42. 관찰 실습 */
@@ -778,7 +800,7 @@ bullets(s, [
   { t: "     → 루프 안 브레이크포인트라 매 회전마다 멈춤 — 합이 쌓이는 과정 관찰", sub: true },
   { t: "4)  브레이크포인트 해제 (다시 클릭)" },
 ], { x: 0.55, y: 1.35, w: 6.9, h: 3.4, fontSize: 13.5 });
-shot(s, { x: 7.7, y: 1.3, w: 5.1, h: 4.4, id: "D1-05", cap: "에디터의 브레이크포인트 아이콘과\n디버거 진입 순간" });
+shot(s, { x: 7.7, y: 1.3, w: 5.1, h: 4.4, id: "D1-05", cap: "gv_sum = gv_sum + sy-index. 줄의\n브레이크포인트 아이콘" });
 s.addNotes("자주 막힘: 중단점이 안 걸림 → 활성 버전·실행 프로그램 이름 확인. 너무 깊이 들어감 → F6/F7로 복귀.");
 
 /* 43. 값 변경 */
@@ -809,6 +831,7 @@ codeBlock(s, { x: 0.55, y: 1.85, w: 6.9, h: 3.4, code: [
   "WRITE: / '1~10 합계:', gv_sum.",
 ] });
 card(s, 7.75, 1.85, 5.05, 3.4, "규칙", "눈으로 찾지 말 것!\n\n반드시 디버거로 gv_sum이\n언제 0으로 돌아가는지 관찰\n— 그게 오늘의 목적입니다.\n\n원인 줄을 찾고, 고치세요.", { fill: "FDF3E3", tColor: "9A6A12", bSize: 13.5 });
+banner(s, 0.55, 5.55, 12.25, "빨리 끝났다면 퀴즈집 D05 · 어려웠다면 E05 · 정답은 교재 부록 A", { color: "FDF3E3", tcolor: "9A6A12" });
 s.addNotes("U04에서 예고한 '초기화를 루프 안에 둔' 버그. 디버거 사용 자체가 목적이므로 눈으로 찾은 학생도 디버거로 재확인하게 한다.");
 
 /* 45. 브릿지 → DDIC */
@@ -888,7 +911,7 @@ tbl(s, [
 bullets(s, [
   { t: "3)  저장 → 활성화 — 이 도메인을 쓰는 필드에 F4 목록이 공짜로 생깁니다", b: true },
 ], { x: 0.55, y: 4.6, w: 6.8, h: 0.8, fontSize: 14 });
-shot(s, { x: 7.45, y: 1.3, w: 5.35, h: 4.4, id: "D1-07", cap: "도메인 Value Range 탭 —\n고정값 N/C/X 입력 화면" });
+shot(s, { x: 7.45, y: 1.3, w: 5.35, h: 4.4, id: "D1-07", cap: "Value Range — N 신규 / C 완료 / X 취소\n고정값 3행" });
 s.addNotes("N/C/X는 U03에서 이미 만난 값 — '아까 조건문으로 판정한 그 상태를 이제 시스템에 새긴다'로 연결.");
 
 /* 51. 고정값의 한계 */
@@ -909,7 +932,7 @@ bullets(s, [
   { t: "4)  저장 → 활성화" },
   { t: "5)  같은 방법으로 DE ZEDU##_STATUS (도메인 ZEDU##_STATUS · 라벨 '주문상태')" },
 ], { x: 0.55, y: 1.35, w: 6.9, h: 3.6, fontSize: 13 });
-shot(s, { x: 7.7, y: 1.3, w: 5.1, h: 4.4, id: "D1-08", cap: "DE Field Label 탭 —\n4가지 길이 라벨 입력" });
+shot(s, { x: 7.7, y: 1.3, w: 5.1, h: 4.4, id: "D1-08", cap: "Field Label — Short/Medium/Long/Heading\n'주문번호' 입력" });
 s.addNotes("같은 이름의 도메인/DE를 어느 칸에 넣는지 혼동 — Domain 란(도메인)과 Data type 란(DE) 위치를 화면에서 명확히 가리킨다.");
 
 /* 53. Q07 */
@@ -926,6 +949,7 @@ bullets(s, [
   { t: "Day 3 확장 과제에서 주문 테이블에 이 필드를 직접 추가해볼 수 있습니다", color: MUTED },
 ], { x: 0.55, y: 3.6, w: 8.8, h: 0.6, fontSize: 12.5 });
 card(s, 9.5, 2.0, 3.3, 2.2, "판정", "도메인·DE 모두\n'활성' 상태", { bSize: 13 });
+banner(s, 0.55, 4.65, 12.25, "빨리 끝났다면 퀴즈집 D06 · 어려웠다면 E06 · 정답은 교재 부록 A", { color: "FDF3E3", tcolor: "9A6A12" });
 s.addNotes("방금 한 것의 반복이라 대부분 완주 가능. 완료자는 퀴즈집 U06-D.");
 
 /* ===========================================================================
@@ -980,7 +1004,7 @@ bullets(s, [
   { t: "키 필드 2개는 Key + Initial Values 체크", b: true },
   { t: "직접 타입(음영)은 해당 행에서 Predefined Type 버튼", sub: true },
 ], { x: 0.55, y: 5.35, w: 8.0, h: 0.9, fontSize: 12 });
-shot(s, { x: 8.85, y: 1.25, w: 3.95, h: 4.6, id: "D1-09", cap: "Fields 탭 — 9필드 입력 완료 화면" });
+shot(s, { x: 8.85, y: 1.25, w: 3.95, h: 4.6, id: "D1-09", cap: "ZEDU##_ORDER Fields — 9필드 완료\n키 2개 체크" });
 s.addNotes("타입 지정 3방식(내 DE/공용 DE/직접)이 이 표 안에 다 있음을 가리킨다. 통화/수량 경고가 나오면 교재의 지정 타입과 대조.");
 
 /* 58. 기술설정/활성화 */
@@ -1051,6 +1075,7 @@ bullets(s, [
   { t: "3)  \"저장\"만 하고 \"활성화\"를 안 한 테이블은 프로그램에서 쓸 수 있을까?", b: true },
 ], { x: 0.55, y: 1.4, w: 12.1, h: 2.2, fontSize: 15 });
 banner(s, 0.55, 4.0, 12.25, "⏰ 시작 후 43분 — ZEDU##_S_LIST 12필드 활성 마감. 미완료 시 기준본 전환 후 U08로!", {});
+banner(s, 0.55, 4.75, 12.25, "빨리 끝났다면 퀴즈집 D07 · 어려웠다면 E07 · 정답은 교재 부록 A", { color: "FDF3E3", tcolor: "9A6A12" });
 s.addNotes("Q08은 짝과 서로 설명(1분씩). 세 질문 모두 오늘 칠판의 3계층 그림으로 답할 수 있다.");
 
 /* ===========================================================================
