@@ -401,9 +401,9 @@ bullets(s, [
   { t: "로직: 고객명을 조회해 반환, 없으면 NOT_FOUND", b: true },
   { t: "SE37 F8로 세 케이스(정상 / 없는 고객 / 빈값) 테스트까지가 과제", b: true },
 ], { x: 0.55, y: 3.75, w: 7.9, h: 1.2, fontSize: 13.5 });
-card(s, 8.85, 1.8, 3.95, 3.1, "다 풀었다면", "퀴즈집 U16-D\n(고객별 주문 건수 FM)\n어려웠다면 U16-E\n\n정답은 부록 A —\n지금은 보지 않기!", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
+card(s, 8.85, 1.8, 3.95, 3.1, "다 풀었다면", "퀴즈집 D16\n(고객별 주문 건수 FM)\n어려웠다면 E16\n\n정답은 부록 A —\n지금은 보지 않기!", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
 banner(s, 0.55, 5.15, 12.25, "오전에 만든 ORDER_CHECK와 같은 패턴 — SELECT SINGLE + sy-subrc + RAISE", {});
-s.addNotes("정답 비노출(부록 A). 빠른 학생은 U16-D(고객별 주문 건수 FM — COUNT 응용).");
+s.addNotes("정답 비노출(부록 A). 빠른 학생은 D16(고객별 주문 건수 FM — COUNT 응용).");
 
 /* ===========================================================================
  * U17 (13~21)
@@ -546,7 +546,7 @@ codeBlock(s, { x: 0.55, y: 1.8, w: 8.1, h: 3.0, title: "TODO 3개", code: [
   "",
   "* TODO 3: 실행 후 ZEDU_DATA_LOAD(초기화 옵션)로 데이터 리셋",
 ] });
-card(s, 8.85, 1.8, 3.95, 3.0, "다 풀었다면", "퀴즈집 U17-D\n(조건부 수량 증가)\n어려웠다면 U17-E\n\n정답은 부록 A", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
+card(s, 8.85, 1.8, 3.95, 3.0, "다 풀었다면", "퀴즈집 D17\n(조건부 수량 증가)\n어려웠다면 E17\n\n정답은 부록 A", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
 banner(s, 0.55, 5.1, 12.25, "TODO 3 리셋은 필수 — 오후 Toy Project를 깨끗한 20건으로 시작하기 위함입니다", {});
 s.addNotes("정답 비노출. TODO 2는 UPDATE SET + sy-dbcnt 조합 확인. TODO 3(ZEDU_DATA_LOAD 초기화)을 건너뛰지 않게 순회 확인 — 오후 TP의 전제.");
 
@@ -628,9 +628,9 @@ bullets(s, [
   { t: "TODO 3: 같은 메시지를 TYPE 'I'(팝업)로도", b: true },
   { t: "    MESSAGE i900(zedu##_msg) WITH sy-uname.", sub: true },
 ], { x: 0.55, y: 1.35, w: 8.0, h: 2.6, fontSize: 14.5 });
-card(s, 8.85, 1.35, 3.95, 2.6, "다 풀었다면", "퀴즈집 U18-D\n(검증 결과별 메시지)\n어려웠다면 U18-E\n\n정답은 부록 A", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
+card(s, 8.85, 1.35, 3.95, 2.6, "다 풀었다면", "퀴즈집 D18\n(검증 결과별 메시지)\n어려웠다면 E18\n\n정답은 부록 A", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
 banner(s, 0.55, 4.35, 12.25, "s900 → i900 — 타입 한 글자가 표시(상태바/팝업)와 흐름을 바꿉니다", {});
-s.addNotes("정답 비노출. WITH의 &1 자리 채움과 타입별 표시 차이 확인이 목적. 빠른 학생은 U18-D.");
+s.addNotes("정답 비노출. WITH의 &1 자리 채움과 타입별 표시 차이 확인이 목적. 빠른 학생은 D18.");
 
 /* 28. 점심 브릿지 */
 s = dark();
@@ -765,9 +765,9 @@ bullets(s, [
   { t: "힌트: DESCRIBE TABLE로 건수 → CONCATENATE로 문장 조립", b: true },
   { t: "건수(숫자 타입)는 문자 변수로 옮겨 CONDENSE 후 연결 — Day 2의 그 규칙!", sub: true },
 ], { x: 0.55, y: 1.8, w: 8.0, h: 3.0, fontSize: 14 });
-card(s, 8.85, 1.8, 3.95, 3.0, "다 풀었다면", "퀴즈집 U19-D\n(선택 행 금액 표시)\n어려웠다면 U19-E\n([신규만] 버튼)\n\n정답은 부록 A", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
+card(s, 8.85, 1.8, 3.95, 3.0, "다 풀었다면", "퀴즈집 D19\n(선택 행 금액 표시)\n어려웠다면 E19\n([신규만] 버튼)\n\n정답은 부록 A", { fill: "FDF3E3", tColor: "9A6A12", bSize: 12.5 });
 banner(s, 0.55, 5.1, 12.25, "SE41 버튼 추가 → CASE에 WHEN 'FC_CNT' — 화면(기능 코드)과 코드(WHEN)의 계약을 직접 체결", {});
-s.addNotes("정답 비노출. 숫자→문자 변환(CONDENSE) 후 CONCATENATE는 Day 2 확정 패턴의 재적용. 빠른 학생은 U19-D(선택 행 금액 — 두 값 연결).");
+s.addNotes("정답 비노출. 숫자→문자 변환(CONDENSE) 후 CONCATENATE는 Day 2 확정 패턴의 재적용. 빠른 학생은 D19(선택 행 금액 — 두 값 연결).");
 
 /* ===========================================================================
  * TP (37~59)
